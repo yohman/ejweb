@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>EJ in IE</title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+	<link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
+	<script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+
+	<!-- import css -->
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+<body>
+<div id="map"></div>
+<div id="info-panel">
+    <div class="info-item" id="info-tract-id">Hover over a tract</div>
+    <div class="info-item" id="info-population"></div>
+    <div class="info-item" id="info-dieselpm"></div>
+</div>
+<div id="slider-container">
+	<div class="info-title">Environmental Justice in the Inland Empire</div>
+	<div class="info-subtitle">Select an indicator to view the distribution of environmental justice scores in the Inland Empire</div>
+	<br>
+	<!-- add buttons for each indicator, and assign onclick events to updateLayer() -->
+	<div>
+		<button title="DieselPM_P" onclick="updateLayer('DieselPM_P')" class="selected">Diesel PM</button>
+		<button title="OzoneP" onclick="updateLayer('OzoneP')">Ozone</button>
+		<button title="CIscoreP" onclick="updateLayer('CIscoreP')">CIscore</button>
+		<button title="PM2_5_P" onclick="updateLayer('PM2_5_P')">PM2.5</button>
+		<button title="PovertyP" onclick="updateLayer('PovertyP')">Poverty</button>
+		<button title="UnemplP" onclick="updateLayer('UnemplP')">Unemployment</button>
+	</div>
+	<br>
+	<div>
+		<!-- add an on/off toggle slider -->
+		<!-- Toggle button to turn warehouses on/off -->
+		<div class="toggle-container">
+			<label class="switch">
+				<input type="checkbox" id="toggle-button">
+				<span class="slider round"></span>
+			</label>
+			<span id="toggle-label">
+				Warehouses
+				<span class="toggle-info" style="display: none;">
+					<label for="year-slider">Year Built (1980-2025):</label>
+					<input id="year-slider" type="range" min="1980" max="2025" value="1980" step="1">
+					<span id="year-slider-value">1980</span>
+				</span>	
+			</span>
+		</div>
+		
+	</div>
+</div>
+
+<div id="legend"></div>
+
+<!-- <div>
+	<span id="year-slider-label" class="big-label">1980</span>
+</div> -->
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoieW9obWFuIiwiYSI6IkxuRThfNFkifQ.u2xRJMiChx914U7mOZMiZw';
+	
+	// monochrome day
+	mapbox_style = 'mapbox://styles/yohman/cm0n91f7n01bt01rbdjaj4g3r';
+
+	// monochrome dusk
+	// mapbox_style = 'mapbox://styles/yohman/cm0n8u3sm001501pq0rcg3i7b';
+	
+	const map = new mapboxgl.Map({
+		container: 'map',
+		// style: 'mapbox://styles/mapbox/standard',
+		style: mapbox_style,
+		center: [-117.7, 34],
+		zoom: 8,
+		maxZoom: 16
+	});
+
+	// make toggle switch work. If checked, add warehouses, else remove them
+	const toggleButton = document.getElementById('toggle-button');
+	toggleButton.addEventListener('change', (e) => {
+		if (e.target.checked) {
+			addWarehouses();
+		} else {
+			removeWarehouses();
+		}
+	});
+
+	map.on('style.load', () => {
+
+		// -------------------------------------------------------------------- //
+		// ----------------- Add the project area tracts layer ----------------- //
+		// -------------------------------------------------------------------- //
+
+		map.addSource('tracts', {
+			'type': 'geojson',
+			// 'data': 'data/project area/CA census tracts with census data.geojson'
+			'data': 'data/calenviroscreen.geojson'
+		});
+
+		// Add the layer to the map
+		addLayer();
+
+		// function to add layer
+		function addLayer(variable='DieselPM_P') {
+			map.addLayer({
+				'id': 'tracts-choropleth',
+				'type': 'fill',
+				'slot': 'top',
+				'source': 'tracts',
+				'layout': {},
+				'paint': {
+					'fill-color': [
+						'interpolate',
+						['linear'],
+						['get', variable],
+						0, '#f7f7f7',
+						20, '#cccccc',
+						40, '#969696',
+						60, '#636363',
+						80, '#252525'
+					],
+					'fill-opacity': 0.8
+				}
+			});
+			addLegend(variable);
+		}
+
+
+
+		// Create the highlight layer (tract outline) that will change on hover
+		map.addLayer({
+			'id': 'tract-highlight',
+			'type': 'line',
+			'source': 'tracts',
+			'slot': 'top',
+			'layout': {},
+			'paint': {
+				'line-color': 'yellow',
+				'line-width': 4
+			},
+			// Initially hide the highlight layer by applying an empty filter
+			'filter': ['==', 'Tract', '']
+		});
+
+		// Event handlers for hover effect
+		map.on('mouseenter', 'tracts-choropleth', () => {
+			map.getCanvas().style.cursor = 'pointer';
+		});
+
+		// map.on('mouseleave', 'tracts-choropleth', () => {
+		// 	map.getCanvas().style.cursor = '';
+		// 	// Remove the highlight when the mouse leaves the tract
+		// 	map.setFilter('tract-highlight', ['==', 'Tract', '']);
+        //     document.getElementById('info-tract-id').textContent = 'Hover over a tract';
+        //     document.getElementById('info-population').textContent = '';
+        //     document.getElementById('info-dieselpm').textContent = '';
+		// });
+
+		map.on('mousemove', 'tracts-choropleth', (e) => {
+			// Get the Tract of the hovered tract
+			const hoveredTract = e.features[0].properties.Tract;
+            const population = e.features[0].properties.TotPop19;
+            const dieselPM = e.features[0].properties.DieselPM_P;
+			const TotPop19 = Math.round(e.features[0].properties.TotPop19);
+			const DieselPM_P = Math.round(e.features[0].properties.DieselPM_P);
+			const OzoneP = Math.round(e.features[0].properties.OzoneP);
+			const CIscoreP = Math.round(e.features[0].properties.CIscoreP);
+			const PM2_5_P = Math.round(e.features[0].properties.PM2_5_P);
+			const PovertyP = Math.round(e.features[0].properties.PovertyP);
+			const UnemplP = Math.round(e.features[0].properties.UnemplP);
+
+			// put these in a group for a waffle chart
+			const Child_10 = e.features[0].properties.Child_10;
+			const Pop_10_64 = e.features[0].properties.Pop_10_64;
+			const Elderly65 = e.features[0].properties.Elderly65;
+
+			// put these in a group for a waffle chart
+			const Hispanic = e.features[0].properties.Hispanic;
+			const White = e.features[0].properties.White;
+			const AfricanAm = e.features[0].properties.AfricanAm;
+			const NativeAm = e.features[0].properties.NativeAm;
+			const AAPI = e.features[0].properties.AAPI;
+			const OtherMult = e.features[0].properties.OtherMult;
+
+
+			const html= `
+				<h3>${e.features[0].properties.ApproxLoc}<br><span style="font-size:0.6em">${e.features[0].properties.County} (pop: ${TotPop19})</span></h3>
+				
+				<div class="info-container"><span class="info-value">${DieselPM_P}%</span><br>${generatePercentileBar(DieselPM_P)}<span class="info-label">DieselPM_P</span></div>
+				<div class="info-container"><span class="info-value">${OzoneP}%</span><br>${generatePercentileBar(OzoneP)}<span class="info-label">OzoneP</span></div>
+				<div class="info-container"><span class="info-value">${CIscoreP}%</span><br>${generatePercentileBar(CIscoreP)}<span class="info-label">CIscoreP</span></div>
+				<div class="info-container"><span class="info-value">${PM2_5_P}%</span><br>${generatePercentileBar(PM2_5_P)}<span class="info-label">PM2_5_P</span></div>
+				<div class="info-container"><span class="info-value">${PovertyP}%</span><br>${generatePercentileBar(PovertyP)}<span class="info-label">PovertyP</span></div>
+				<div class="info-container"><span class="info-value">${UnemplP}%</span><br>${generatePercentileBar(UnemplP)}<span class="info-label">UnemplP</span></div>
+
+				<hr>
+				`;
+
+			// Generate waffle chart
+			const waffleChartHTML = generateWaffleChart('Age',
+				['Child (0-9)', 'Population (10-64)', 'Elderly (65+)'],
+				[Child_10, Pop_10_64, Elderly65]
+			);
+
+			// Generate waffle chart for race values
+			const waffleChartRaceHTML = generateWaffleChart('Race',
+				['Hispanic', 'White', 'African American', 'AAPI', 'Native American', 'Other Multiracial'],
+				[Hispanic, White, AfricanAm, AAPI, NativeAm, OtherMult]
+			);
+
+			// Add the waffle chart HTML to the info panel
+			document.getElementById('info-tract-id').innerHTML = html + waffleChartHTML + waffleChartRaceHTML;
+
+
+
+			// Update the highlight layer filter to show the hovered tract
+			map.setFilter('tract-highlight', ['==', 'Tract', hoveredTract]);
+
+			// document.getElementById('info-tract-id').innerHTML = html;
+
+			// // Update the info panel with the selected tract's data
+            // document.getElementById('info-tract-id').innerHTML = `<span class="info-label">Tract ID:</span> ${hoveredTract}`;
+            // document.getElementById('info-population').innerHTML = `<span class="info-label">Population:</span> ${population}`;
+            // document.getElementById('info-dieselpm').innerHTML = `<span class="info-label">Diesel PM:</span> ${dieselPM}`;
+		});        
+		// -------------------------------------------------------------------- //
+		// ----------------- Add the project area water layer ----------------- //
+		// -------------------------------------------------------------------- //
+
+		map.addSource('project-area-water', {
+			'type': 'geojson',
+			'data': 'data/project area water2.geojson'
+		});
+		map.addLayer({
+			'id': 'project-area-water-fill',
+			'type': 'fill',
+			'slot': 'middle',
+			'source': 'project-area-water',
+			'layout': {},
+			'paint': {
+				'fill-color': 'blue',
+				'fill-opacity': 0.9
+			}
+		});
+
+		// -------------------------------------------------------------------- //
+		// Add the warehouse layer with circles
+		// -------------------------------------------------------------------- //
+
+		map.addSource('warehouses', {
+			'type': 'geojson',
+			'data': 'data/warehouse_points.geojson'
+		});
+
+	});
+	
+	function addWarehouses(){
+
+		// turn toggle info on
+		document.querySelector('.toggle-info').style.display = 'inline-block';
+
+		// remove the layer if it already exists
+		if (map.getLayer('warehouses')) {
+			map.removeLayer('warehouses');
+		}
+
+		map.addLayer({
+			'id': 'warehouses',
+			'type': 'circle',
+			'slot': 'top',
+			'source': 'warehouses',
+			'layout': {},
+			'paint': {
+				'circle-radius': [
+					'interpolate',
+					['linear'],
+					['get', 'shape_area'],
+					0, 3,
+					10000000, 20
+				],
+				'circle-color': 'red',
+				'circle-opacity': 0.6,
+				'circle-stroke-color': 'white',
+				'circle-stroke-width': 1
+			},
+			// Set initial filter to show circles where year_built is 1980
+			'filter': ['<=', ['get', 'year_built'], 1980]
+		});
+
+		// Create a popup
+		const popup = new mapboxgl.Popup({
+			closeButton: false,
+			closeOnClick: false
+		});
+
+		// Add hover event to show popup with apn and shape_area
+		map.on('mouseenter', 'warehouses', (e) => {
+			map.getCanvas().style.cursor = 'pointer';
+
+			const coordinates = e.features[0].geometry.coordinates.slice();
+			const apn = e.features[0].properties.apn;
+			const shape_area = e.features[0].properties.shape_area;
+			const year_built = e.features[0].properties.year_built;
+
+			while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+				coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+			}
+
+			// Set the popup's content and location
+			popup
+				.setLngLat(coordinates)
+				.setHTML(`<strong>APN:</strong> ${apn}<br><strong>Shape Area:</strong> ${shape_area}<br><strong>Year Built:</strong> ${year_built}`)
+				.addTo(map);
+		});
+
+		map.on('mouseleave', 'warehouses', () => {
+			map.getCanvas().style.cursor = '';
+			popup.remove();
+		});
+
+
+		// Slider functionality to filter circles by shape_area
+		const yearSlider = document.getElementById('year-slider');
+		const yearSliderValue = document.getElementById('year-slider-value');
+		const yearSliderLabel = document.getElementById('year-slider-label');
+
+		// Slider functionality to filter circles by year_built
+		yearSlider.addEventListener('input', (e) => {
+			const yearBuilt = parseInt(e.target.value);
+			yearSliderValue.textContent = yearBuilt;
+			// yearSliderLabel.textContent = yearBuilt;
+
+			// Update the circle filter based on the year_built value
+			map.setFilter('warehouses', ['all',
+				// ['<=', ['get', 'shape_area'], parseInt(slider.value)],
+				['<=', ['get', 'year_built'], yearBuilt]
+			]);
+		});
+	}
+
+	function removeWarehouses(){
+		if (map.getLayer('warehouses')) {
+			map.removeLayer('warehouses');
+		}
+		document.querySelector('.toggle-info').style.display = 'none';
+	}
+
+	// -------------------------------------------------------------------- //
+	// Function to update the layer based on the selected variable
+	// -------------------------------------------------------------------- //
+
+	function updateLayer(variable='DieselPM_P') {
+		map.setPaintProperty('tracts-choropleth', 'fill-color', [
+			'interpolate',
+			['linear'],
+			['get', variable],
+			0, '#f7f7f7',
+			20, '#cccccc',
+			40, '#969696',
+			60, '#636363',
+			80, '#252525'
+		]);
+		addLegend(variable);
+
+		// add a class to the selected button
+		const buttons = document.querySelectorAll('button');
+		buttons.forEach(button => {
+			button.classList.remove('selected');
+			// if button title is equal to the variable, add the selected class
+			if (button.title === variable) {
+				button.classList.add('selected');
+			}
+		});
+	}
+
+
+	// -------------------------------------------------------------------- //
+	// Function to add a layer to the map    							    //
+	// -------------------------------------------------------------------- //
+	function addLegend(variable='DieselPM_P') {
+		const legend = document.getElementById('legend');
+		const colors = ['#f7f7f7', '#cccccc', '#969696', '#636363', '#252525'];
+		const labels = ['0-20', '20-40', '40-60', '60-80', '80+'];
+
+		// add title that includes the variable name
+		legend.innerHTML = `<div class="legend-title">${variable}</div>`;
+		
+		colors.forEach((color, index) => {
+			const item = document.createElement('div');
+			item.className = 'legend-item';
+			const key = document.createElement('span');
+			key.className = 'legend-key';
+			key.style.backgroundColor = color;
+			// add empty char to the key
+			key.innerHTML = '&nbsp;&nbsp;&nbsp;';
+			
+			const value = document.createElement('span');
+			value.innerHTML = labels[index];
+			item.appendChild(key);
+			item.appendChild(value);
+			legend.appendChild(item);
+		});
+	}	
+
+	// -------------------------------------------------------------------- //
+	// Function to generate a waffle chart
+	// -------------------------------------------------------------------- //
+
+	function generateWaffleChart(title, attributes, values) {
+		const total = values.reduce((acc, val) => acc + val, 0); // Sum of all values
+		let percentages = values.map(val => Math.round((val / total) * 100)); // Calculate percentage for each value
+
+		// create a list of 6 colors
+		const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33FF', '#FFFF33', '#FF5733']; // Define colors for each attribute
+
+
+		// const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33FF', '#FFFF33']; // Define colors for each attribute
+
+		// Adjust percentages to ensure they sum up to 100
+		let totalPercentage = percentages.reduce((acc, val) => acc + val, 0);
+		let diff = 100 - totalPercentage;
+
+		if (diff !== 0) {
+			// Find the index of the largest value to adjust the difference
+			let largestIndex = percentages.indexOf(Math.max(...percentages));
+			percentages[largestIndex] += diff;
+		}
+
+		// Generate the HTML for the waffle chart
+		let waffleHTML = '<div class="waffle-chart-container">';
+
+		waffleHTML += `<span class="waffle-title">${title}</span>`;
+		waffleHTML += '<div class="waffle-chart">';
+
+		let filledCells = 0;
+
+		percentages.forEach((percentage, index) => {
+			for (let i = 0; i < percentage; i++) {
+				waffleHTML += `<div class="waffle-chart" style="background-color: ${colors[index]};"></div>`;
+				filledCells++;
+			}
+		});
+
+		// Fill any remaining cells if necessary (shouldn't happen with the adjustment)
+		while (filledCells < 100) {
+			waffleHTML += `<div class="waffle-chart" style="background-color: #ccc;"></div>`;
+			filledCells++;
+		}
+
+		waffleHTML += '</div>';
+
+		// Add legend for the attributes
+		let legendHTML = '<div class="waffle-legend">';
+		attributes.forEach((attribute, index) => {
+			legendHTML += `<div class="legend-item waffle-chart">
+				<span style="background-color: ${colors[index]}; width: 16px; height: 16px; display: inline-block;"></span> 
+				${Math.round(values[index])}% - ${attribute}
+			</div>`;
+		});
+		legendHTML += '</div>';
+
+		waffleHTML += legendHTML;
+		waffleHTML += '</div>';
+
+		return waffleHTML;
+	}
+
+	// -------------------------------------------------------------------- //
+	// Function to generate a percentile bar
+	// -------------------------------------------------------------------- //
+
+	function generatePercentileBar(value) {
+		// Ensure the value is between 0 and 100
+		value = Math.max(0, Math.min(100, value));
+
+		// HTML for the percentile bar
+		let barHTML = `
+			<div class="percentile-bar-container">
+				<div class="percentile-bar">
+					<div class="indicator" style="left: calc(${value}% - 1px);"></div>
+				</div>
+			</div>
+		`;
+
+		return barHTML; 
+	}
+</script>
+
+</body>
+</html>

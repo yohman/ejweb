@@ -1,0 +1,13 @@
+site_name: Inland Empire Environmental Maproom
+theme:
+  name: material
+
+extra_css:
+  - maproom/css/style.css
+
+nav:
+  - Home: index.md
+  - Maproom: 
+      - Embedded Map: maproom/index.html
+  - Data: data.md
+  - Team: team.md

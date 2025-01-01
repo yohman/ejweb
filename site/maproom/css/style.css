@@ -1,0 +1,286 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#map {
+    width: 50%;
+    height: 100%;
+}
+
+/*
+    The info panel is a container for the information about the selected country.
+    It is a flex container with a column direction, so the items are stacked vertically.
+    The items are centered horizontally and vertically.
+    The text is centered.
+*/    
+#info-panel {
+    width: 50%;
+    background-color: #f0f0f0;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.info-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.info-container {
+    display: inline-block;
+}
+.info-item {
+    font-size: 1.4em;
+    margin: 10px 0;
+    color: #333;
+}
+.info-item.highlight {
+    color: #d9534f; /* Highlight color */
+}
+.info-label {
+    color: #333;
+    font-size: 0.4em;
+}
+.info-value {
+    font-size: 1.2em;
+    /* font-weight: bold; */
+    background-color: #ccc;
+    padding: 8px;
+    border:2px solid #ccc;
+}
+
+.info-value-highlight {
+    background-color: #d9534f;
+    color: white;
+}
+
+/*
+    The slider container is a container for the slider and the year label.
+    It is an absolute positioned container with a white background and a padding of 10px.
+    The z-index is set to 1 to make sure it is on top of the map.
+    The border-radius is set to 5px to make the corners round.
+    The max-width is set to 700px to make sure it does not get too wide.
+*/
+#slider-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: white;
+    padding: 10px;
+    z-index: 1;
+    border-radius: 5px;
+    max-width: 700px;
+}
+
+#slider, #year-slider {
+    width: 300px;
+}
+.big-label {
+    position:absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    padding: 10px;
+    z-index: 1;
+    border-radius: 5px;
+    font-size: 8em;
+    opacity: 0.8;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/*
+    The waffle chart container is a container for the waffle chart.
+    It is an inline-block container with a margin-right of 20px.
+    The text is aligned to the left.
+*/
+.waffle-chart-container {
+    vertical-align: top;
+    display: inline-block; 
+    margin-right: 20px;
+    text-align: left;
+}
+
+.waffle-title {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.waffle-chart {
+    display: grid;
+    grid-template-columns: repeat(10, 10px);
+    grid-gap: 1px;
+}
+
+.waffle-chart div {
+    width: 10px;
+    height: 10px;
+}
+
+.waffle-legend {
+    margin-top: 10px;
+}
+
+/*
+    The legend container is a container for the legend.
+    It is an absolute positioned container with a white background and a padding of 10px.
+    The z-index is set to 1 to make sure it is on top of the map.
+    The border-radius is set to 5px to make the corners round.
+*/
+#legend {
+    position: absolute;
+    bottom: 35px;
+    left: 10px;
+    background: white;
+    padding: 10px;
+    z-index: 1;
+    border-radius: 5px;
+    opacity: 0.8;
+}
+
+.legend-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.legend-key{
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    /* border-radius: 50%; */
+    display: inline-block;
+}
+.legend-item span {
+    margin-right: 8px;
+}
+
+/*
+    The chart container is a container for the chart.
+    It is an inline-block container with a margin-right of 20px.
+    The text is aligned to the left.
+*/
+.percentile-bar-container {
+    width: 100%;
+    height: 10px;
+    position: relative;
+}
+
+.percentile-bar {
+    width: 100%;
+    height: 5px;
+    background-color: darkgray;
+    position: relative;
+}
+
+.indicator {
+    width: 2px;
+    height: 10px;
+    background-color: red;
+    position: absolute;
+    top: -2px;
+}
+
+.selected {
+    background-color: #d9534f;
+}
+
+/* create a minimal style for the buttons with an on-hover effect */
+button {
+    background-color: #f0f0f0;
+    border: none;
+    color: #333;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition-duration: 0.4s;
+}
+
+button:hover {
+    background-color: #d9534f;
+    color: white;
+}
+
+
+/* Toggle data button slider */
+/* Toggle Button Styling */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+    vertical-align: bottom;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(13px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 17px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+#toggle-label {
+    /* vertical-align: -webkit-baseline-middle; */
+}
