@@ -8,6 +8,7 @@ extra_css:
 nav:
   - Home: index.md
   - Maproom: 
-      - Embedded Map: maproom/index.html
+      - Overview: maproom/index.md
+      - Explore: maproom/map.html
   - Data: data.md
   - Team: team.md

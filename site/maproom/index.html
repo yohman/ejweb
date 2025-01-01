@@ -1,491 +1,680 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>EJ in IE</title>
-	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-	<link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
-	<script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
 
-	<!-- import css -->
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="map.html">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.35">
+    
+    
+      
+        <title>Overview - Inland Empire Environmental Maproom</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.35f28582.min.css">
+      
+      
 
-</head>
-<body>
-<div id="map"></div>
-<div id="info-panel">
-    <div class="info-item" id="info-tract-id">Hover over a tract</div>
-    <div class="info-item" id="info-population"></div>
-    <div class="info-item" id="info-dieselpm"></div>
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="css/style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#how-to-use-the-maproom" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Inland Empire Environmental Maproom" class="md-header__button md-logo" aria-label="Inland Empire Environmental Maproom" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Inland Empire Environmental Maproom
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div id="slider-container">
-	<div class="info-title">Environmental Justice in the Inland Empire</div>
-	<div class="info-subtitle">Select an indicator to view the distribution of environmental justice scores in the Inland Empire</div>
-	<br>
-	<!-- add buttons for each indicator, and assign onclick events to updateLayer() -->
-	<div>
-		<button title="DieselPM_P" onclick="updateLayer('DieselPM_P')" class="selected">Diesel PM</button>
-		<button title="OzoneP" onclick="updateLayer('OzoneP')">Ozone</button>
-		<button title="CIscoreP" onclick="updateLayer('CIscoreP')">CIscore</button>
-		<button title="PM2_5_P" onclick="updateLayer('PM2_5_P')">PM2.5</button>
-		<button title="PovertyP" onclick="updateLayer('PovertyP')">Poverty</button>
-		<button title="UnemplP" onclick="updateLayer('UnemplP')">Unemployment</button>
-	</div>
-	<br>
-	<div>
-		<!-- add an on/off toggle slider -->
-		<!-- Toggle button to turn warehouses on/off -->
-		<div class="toggle-container">
-			<label class="switch">
-				<input type="checkbox" id="toggle-button">
-				<span class="slider round"></span>
-			</label>
-			<span id="toggle-label">
-				Warehouses
-				<span class="toggle-info" style="display: none;">
-					<label for="year-slider">Year Built (1980-2025):</label>
-					<input id="year-slider" type="range" min="1980" max="2025" value="1980" step="1">
-					<span id="year-slider-value">1980</span>
-				</span>	
-			</span>
-		</div>
-		
-	</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Inland Empire Environmental Maproom" class="md-nav__button md-logo" aria-label="Inland Empire Environmental Maproom" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Inland Empire Environmental Maproom
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Maproom
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Maproom
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#interactive-environmental-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interactive Environmental Layers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interactive Environmental Layers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-environmental-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing Environmental Layers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#warehouses-and-time-navigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Warehouses and Time Navigation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Warehouses and Time Navigation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-use-this-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to Use This Feature:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#census-tract-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Census Tract Profiles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Census Tract Profiles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#information-included" class="md-nav__link">
+    <span class="md-ellipsis">
+      Information Included:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#explore-the-maproom" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explore the Maproom
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="map.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Explore
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../team/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Team
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#interactive-environmental-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interactive Environmental Layers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interactive Environmental Layers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-environmental-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing Environmental Layers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#warehouses-and-time-navigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Warehouses and Time Navigation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Warehouses and Time Navigation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-use-this-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to Use This Feature:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#census-tract-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Census Tract Profiles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Census Tract Profiles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#information-included" class="md-nav__link">
+    <span class="md-ellipsis">
+      Information Included:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#explore-the-maproom" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explore the Maproom
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="how-to-use-the-maproom"><strong>How to Use the Maproom</strong></h1>
+<p>The <strong>Inland Empire Environmental Maproom</strong> provides powerful tools to explore environmental challenges in the region. This guide explains the key features and how to interact with them effectively.</p>
+<hr />
+<h2 id="interactive-environmental-layers"><strong>Interactive Environmental Layers</strong></h2>
+<p>The Maproom allows you to explore various environmental metrics using a set of interactive buttons. Each button corresponds to a specific environmental factor, such as Diesel PM, Ozone, or PM2.5.</p>
+<h3 id="choosing-environmental-layers"><strong>Choosing Environmental Layers</strong></h3>
+<ul>
+<li><strong>Red Buttons</strong>: Select different environmental layers, as shown below:<br />
+<img alt="Environmental Layers" src="../images/environmental_layers.png" />  </li>
+</ul>
+<p>Clicking a button activates the associated layer on the map, allowing you to view and analyze data for that specific environmental factor.</p>
+<hr />
+<h2 id="warehouses-and-time-navigation"><strong>Warehouses and Time Navigation</strong></h2>
+<p><img alt="warehouses" src="../images/map_warehouses.png" />
+The Maproom includes a dynamic feature to toggle warehouse data on and off. When turned on, you can use the <strong>time bar</strong> to explore warehouses built by year.</p>
+<h3 id="how-to-use-this-feature"><strong>How to Use This Feature</strong>:</h3>
+<ol>
+<li><strong>Toggle Warehouses</strong>: Turn the warehouse layer on using the control panel.</li>
+<li><strong>Navigate Time</strong>: Use the time bar to visualize changes in warehouse density over different years.</li>
+</ol>
+<p>This feature helps you analyze trends in industrial development and their potential impacts on the surrounding environment.</p>
+<hr />
+<h2 id="census-tract-profiles"><strong>Census Tract Profiles</strong></h2>
+<p><img alt="community profile" src="../images/map_race.png" />
+Hovering over census tracts dynamically generates <strong>mini-community profiles</strong>. These profiles provide detailed environmental metrics and demographic data for the selected area.</p>
+<h3 id="information-included"><strong>Information Included</strong>:</h3>
+<ul>
+<li><strong>Environmental Metrics</strong>: Displays values for factors such as air quality, pollution levels, and environmental risks.</li>
+<li><strong>Demographics</strong>: Includes age and race distributions for the selected census tract.</li>
+</ul>
+<p>This feature is ideal for identifying how environmental challenges disproportionately impact certain communities.</p>
+<hr />
+<h2 id="explore-the-maproom"><strong>Explore the Maproom</strong></h2>
+<p>Use the tools above to dive deep into the environmental and demographic data affecting California’s Inland Empire. Click the button below to get started:</p>
+<div style="text-align: center; margin: 20px 0;">
+  <a href="./map.html" style="
+    display: inline-block;
+    background-color: #007BFF;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  " onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007BFF'">
+    Explore the Maproom
+  </a>
 </div>
 
-<div id="legend"></div>
 
-<!-- <div>
-	<span id="year-slider-label" class="big-label">1980</span>
-</div> -->
-<script>
-	mapboxgl.accessToken = 'pk.eyJ1IjoieW9obWFuIiwiYSI6IkxuRThfNFkifQ.u2xRJMiChx914U7mOZMiZw';
-	
-	// monochrome day
-	mapbox_style = 'mapbox://styles/yohman/cm0n91f7n01bt01rbdjaj4g3r';
 
-	// monochrome dusk
-	// mapbox_style = 'mapbox://styles/yohman/cm0n8u3sm001501pq0rcg3i7b';
-	
-	const map = new mapboxgl.Map({
-		container: 'map',
-		// style: 'mapbox://styles/mapbox/standard',
-		style: mapbox_style,
-		center: [-117.7, 34],
-		zoom: 8,
-		maxZoom: 16
-	});
 
-	// make toggle switch work. If checked, add warehouses, else remove them
-	const toggleButton = document.getElementById('toggle-button');
-	toggleButton.addEventListener('change', (e) => {
-		if (e.target.checked) {
-			addWarehouses();
-		} else {
-			removeWarehouses();
-		}
-	});
 
-	map.on('style.load', () => {
 
-		// -------------------------------------------------------------------- //
-		// ----------------- Add the project area tracts layer ----------------- //
-		// -------------------------------------------------------------------- //
 
-		map.addSource('tracts', {
-			'type': 'geojson',
-			// 'data': 'data/project area/CA census tracts with census data.geojson'
-			'data': 'data/calenviroscreen.geojson'
-		});
 
-		// Add the layer to the map
-		addLayer();
 
-		// function to add layer
-		function addLayer(variable='DieselPM_P') {
-			map.addLayer({
-				'id': 'tracts-choropleth',
-				'type': 'fill',
-				'slot': 'top',
-				'source': 'tracts',
-				'layout': {},
-				'paint': {
-					'fill-color': [
-						'interpolate',
-						['linear'],
-						['get', variable],
-						0, '#f7f7f7',
-						20, '#cccccc',
-						40, '#969696',
-						60, '#636363',
-						80, '#252525'
-					],
-					'fill-opacity': 0.8
-				}
-			});
-			addLegend(variable);
-		}
 
 
 
-		// Create the highlight layer (tract outline) that will change on hover
-		map.addLayer({
-			'id': 'tract-highlight',
-			'type': 'line',
-			'source': 'tracts',
-			'slot': 'top',
-			'layout': {},
-			'paint': {
-				'line-color': 'yellow',
-				'line-width': 4
-			},
-			// Initially hide the highlight layer by applying an empty filter
-			'filter': ['==', 'Tract', '']
-		});
-
-		// Event handlers for hover effect
-		map.on('mouseenter', 'tracts-choropleth', () => {
-			map.getCanvas().style.cursor = 'pointer';
-		});
-
-		// map.on('mouseleave', 'tracts-choropleth', () => {
-		// 	map.getCanvas().style.cursor = '';
-		// 	// Remove the highlight when the mouse leaves the tract
-		// 	map.setFilter('tract-highlight', ['==', 'Tract', '']);
-        //     document.getElementById('info-tract-id').textContent = 'Hover over a tract';
-        //     document.getElementById('info-population').textContent = '';
-        //     document.getElementById('info-dieselpm').textContent = '';
-		// });
-
-		map.on('mousemove', 'tracts-choropleth', (e) => {
-			// Get the Tract of the hovered tract
-			const hoveredTract = e.features[0].properties.Tract;
-            const population = e.features[0].properties.TotPop19;
-            const dieselPM = e.features[0].properties.DieselPM_P;
-			const TotPop19 = Math.round(e.features[0].properties.TotPop19);
-			const DieselPM_P = Math.round(e.features[0].properties.DieselPM_P);
-			const OzoneP = Math.round(e.features[0].properties.OzoneP);
-			const CIscoreP = Math.round(e.features[0].properties.CIscoreP);
-			const PM2_5_P = Math.round(e.features[0].properties.PM2_5_P);
-			const PovertyP = Math.round(e.features[0].properties.PovertyP);
-			const UnemplP = Math.round(e.features[0].properties.UnemplP);
-
-			// put these in a group for a waffle chart
-			const Child_10 = e.features[0].properties.Child_10;
-			const Pop_10_64 = e.features[0].properties.Pop_10_64;
-			const Elderly65 = e.features[0].properties.Elderly65;
-
-			// put these in a group for a waffle chart
-			const Hispanic = e.features[0].properties.Hispanic;
-			const White = e.features[0].properties.White;
-			const AfricanAm = e.features[0].properties.AfricanAm;
-			const NativeAm = e.features[0].properties.NativeAm;
-			const AAPI = e.features[0].properties.AAPI;
-			const OtherMult = e.features[0].properties.OtherMult;
-
-
-			const html= `
-				<h3>${e.features[0].properties.ApproxLoc}<br><span style="font-size:0.6em">${e.features[0].properties.County} (pop: ${TotPop19})</span></h3>
-				
-				<div class="info-container"><span class="info-value">${DieselPM_P}%</span><br>${generatePercentileBar(DieselPM_P)}<span class="info-label">DieselPM_P</span></div>
-				<div class="info-container"><span class="info-value">${OzoneP}%</span><br>${generatePercentileBar(OzoneP)}<span class="info-label">OzoneP</span></div>
-				<div class="info-container"><span class="info-value">${CIscoreP}%</span><br>${generatePercentileBar(CIscoreP)}<span class="info-label">CIscoreP</span></div>
-				<div class="info-container"><span class="info-value">${PM2_5_P}%</span><br>${generatePercentileBar(PM2_5_P)}<span class="info-label">PM2_5_P</span></div>
-				<div class="info-container"><span class="info-value">${PovertyP}%</span><br>${generatePercentileBar(PovertyP)}<span class="info-label">PovertyP</span></div>
-				<div class="info-container"><span class="info-value">${UnemplP}%</span><br>${generatePercentileBar(UnemplP)}<span class="info-label">UnemplP</span></div>
-
-				<hr>
-				`;
-
-			// Generate waffle chart
-			const waffleChartHTML = generateWaffleChart('Age',
-				['Child (0-9)', 'Population (10-64)', 'Elderly (65+)'],
-				[Child_10, Pop_10_64, Elderly65]
-			);
-
-			// Generate waffle chart for race values
-			const waffleChartRaceHTML = generateWaffleChart('Race',
-				['Hispanic', 'White', 'African American', 'AAPI', 'Native American', 'Other Multiracial'],
-				[Hispanic, White, AfricanAm, AAPI, NativeAm, OtherMult]
-			);
-
-			// Add the waffle chart HTML to the info panel
-			document.getElementById('info-tract-id').innerHTML = html + waffleChartHTML + waffleChartRaceHTML;
-
-
-
-			// Update the highlight layer filter to show the hovered tract
-			map.setFilter('tract-highlight', ['==', 'Tract', hoveredTract]);
-
-			// document.getElementById('info-tract-id').innerHTML = html;
-
-			// // Update the info panel with the selected tract's data
-            // document.getElementById('info-tract-id').innerHTML = `<span class="info-label">Tract ID:</span> ${hoveredTract}`;
-            // document.getElementById('info-population').innerHTML = `<span class="info-label">Population:</span> ${population}`;
-            // document.getElementById('info-dieselpm').innerHTML = `<span class="info-label">Diesel PM:</span> ${dieselPM}`;
-		});        
-		// -------------------------------------------------------------------- //
-		// ----------------- Add the project area water layer ----------------- //
-		// -------------------------------------------------------------------- //
-
-		map.addSource('project-area-water', {
-			'type': 'geojson',
-			'data': 'data/project area water2.geojson'
-		});
-		map.addLayer({
-			'id': 'project-area-water-fill',
-			'type': 'fill',
-			'slot': 'middle',
-			'source': 'project-area-water',
-			'layout': {},
-			'paint': {
-				'fill-color': 'blue',
-				'fill-opacity': 0.9
-			}
-		});
-
-		// -------------------------------------------------------------------- //
-		// Add the warehouse layer with circles
-		// -------------------------------------------------------------------- //
-
-		map.addSource('warehouses', {
-			'type': 'geojson',
-			'data': 'data/warehouse_points.geojson'
-		});
-
-	});
-	
-	function addWarehouses(){
-
-		// turn toggle info on
-		document.querySelector('.toggle-info').style.display = 'inline-block';
-
-		// remove the layer if it already exists
-		if (map.getLayer('warehouses')) {
-			map.removeLayer('warehouses');
-		}
-
-		map.addLayer({
-			'id': 'warehouses',
-			'type': 'circle',
-			'slot': 'top',
-			'source': 'warehouses',
-			'layout': {},
-			'paint': {
-				'circle-radius': [
-					'interpolate',
-					['linear'],
-					['get', 'shape_area'],
-					0, 3,
-					10000000, 20
-				],
-				'circle-color': 'red',
-				'circle-opacity': 0.6,
-				'circle-stroke-color': 'white',
-				'circle-stroke-width': 1
-			},
-			// Set initial filter to show circles where year_built is 1980
-			'filter': ['<=', ['get', 'year_built'], 1980]
-		});
-
-		// Create a popup
-		const popup = new mapboxgl.Popup({
-			closeButton: false,
-			closeOnClick: false
-		});
-
-		// Add hover event to show popup with apn and shape_area
-		map.on('mouseenter', 'warehouses', (e) => {
-			map.getCanvas().style.cursor = 'pointer';
-
-			const coordinates = e.features[0].geometry.coordinates.slice();
-			const apn = e.features[0].properties.apn;
-			const shape_area = e.features[0].properties.shape_area;
-			const year_built = e.features[0].properties.year_built;
-
-			while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-				coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-			}
-
-			// Set the popup's content and location
-			popup
-				.setLngLat(coordinates)
-				.setHTML(`<strong>APN:</strong> ${apn}<br><strong>Shape Area:</strong> ${shape_area}<br><strong>Year Built:</strong> ${year_built}`)
-				.addTo(map);
-		});
-
-		map.on('mouseleave', 'warehouses', () => {
-			map.getCanvas().style.cursor = '';
-			popup.remove();
-		});
-
-
-		// Slider functionality to filter circles by shape_area
-		const yearSlider = document.getElementById('year-slider');
-		const yearSliderValue = document.getElementById('year-slider-value');
-		const yearSliderLabel = document.getElementById('year-slider-label');
-
-		// Slider functionality to filter circles by year_built
-		yearSlider.addEventListener('input', (e) => {
-			const yearBuilt = parseInt(e.target.value);
-			yearSliderValue.textContent = yearBuilt;
-			// yearSliderLabel.textContent = yearBuilt;
-
-			// Update the circle filter based on the year_built value
-			map.setFilter('warehouses', ['all',
-				// ['<=', ['get', 'shape_area'], parseInt(slider.value)],
-				['<=', ['get', 'year_built'], yearBuilt]
-			]);
-		});
-	}
-
-	function removeWarehouses(){
-		if (map.getLayer('warehouses')) {
-			map.removeLayer('warehouses');
-		}
-		document.querySelector('.toggle-info').style.display = 'none';
-	}
-
-	// -------------------------------------------------------------------- //
-	// Function to update the layer based on the selected variable
-	// -------------------------------------------------------------------- //
-
-	function updateLayer(variable='DieselPM_P') {
-		map.setPaintProperty('tracts-choropleth', 'fill-color', [
-			'interpolate',
-			['linear'],
-			['get', variable],
-			0, '#f7f7f7',
-			20, '#cccccc',
-			40, '#969696',
-			60, '#636363',
-			80, '#252525'
-		]);
-		addLegend(variable);
-
-		// add a class to the selected button
-		const buttons = document.querySelectorAll('button');
-		buttons.forEach(button => {
-			button.classList.remove('selected');
-			// if button title is equal to the variable, add the selected class
-			if (button.title === variable) {
-				button.classList.add('selected');
-			}
-		});
-	}
-
-
-	// -------------------------------------------------------------------- //
-	// Function to add a layer to the map    							    //
-	// -------------------------------------------------------------------- //
-	function addLegend(variable='DieselPM_P') {
-		const legend = document.getElementById('legend');
-		const colors = ['#f7f7f7', '#cccccc', '#969696', '#636363', '#252525'];
-		const labels = ['0-20', '20-40', '40-60', '60-80', '80+'];
-
-		// add title that includes the variable name
-		legend.innerHTML = `<div class="legend-title">${variable}</div>`;
-		
-		colors.forEach((color, index) => {
-			const item = document.createElement('div');
-			item.className = 'legend-item';
-			const key = document.createElement('span');
-			key.className = 'legend-key';
-			key.style.backgroundColor = color;
-			// add empty char to the key
-			key.innerHTML = '&nbsp;&nbsp;&nbsp;';
-			
-			const value = document.createElement('span');
-			value.innerHTML = labels[index];
-			item.appendChild(key);
-			item.appendChild(value);
-			legend.appendChild(item);
-		});
-	}	
-
-	// -------------------------------------------------------------------- //
-	// Function to generate a waffle chart
-	// -------------------------------------------------------------------- //
-
-	function generateWaffleChart(title, attributes, values) {
-		const total = values.reduce((acc, val) => acc + val, 0); // Sum of all values
-		let percentages = values.map(val => Math.round((val / total) * 100)); // Calculate percentage for each value
-
-		// create a list of 6 colors
-		const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33FF', '#FFFF33', '#FF5733']; // Define colors for each attribute
-
-
-		// const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33FF', '#FFFF33']; // Define colors for each attribute
-
-		// Adjust percentages to ensure they sum up to 100
-		let totalPercentage = percentages.reduce((acc, val) => acc + val, 0);
-		let diff = 100 - totalPercentage;
-
-		if (diff !== 0) {
-			// Find the index of the largest value to adjust the difference
-			let largestIndex = percentages.indexOf(Math.max(...percentages));
-			percentages[largestIndex] += diff;
-		}
-
-		// Generate the HTML for the waffle chart
-		let waffleHTML = '<div class="waffle-chart-container">';
-
-		waffleHTML += `<span class="waffle-title">${title}</span>`;
-		waffleHTML += '<div class="waffle-chart">';
-
-		let filledCells = 0;
-
-		percentages.forEach((percentage, index) => {
-			for (let i = 0; i < percentage; i++) {
-				waffleHTML += `<div class="waffle-chart" style="background-color: ${colors[index]};"></div>`;
-				filledCells++;
-			}
-		});
-
-		// Fill any remaining cells if necessary (shouldn't happen with the adjustment)
-		while (filledCells < 100) {
-			waffleHTML += `<div class="waffle-chart" style="background-color: #ccc;"></div>`;
-			filledCells++;
-		}
-
-		waffleHTML += '</div>';
-
-		// Add legend for the attributes
-		let legendHTML = '<div class="waffle-legend">';
-		attributes.forEach((attribute, index) => {
-			legendHTML += `<div class="legend-item waffle-chart">
-				<span style="background-color: ${colors[index]}; width: 16px; height: 16px; display: inline-block;"></span> 
-				${Math.round(values[index])}% - ${attribute}
-			</div>`;
-		});
-		legendHTML += '</div>';
-
-		waffleHTML += legendHTML;
-		waffleHTML += '</div>';
-
-		return waffleHTML;
-	}
-
-	// -------------------------------------------------------------------- //
-	// Function to generate a percentile bar
-	// -------------------------------------------------------------------- //
-
-	function generatePercentileBar(value) {
-		// Ensure the value is between 0 and 100
-		value = Math.max(0, Math.min(100, value));
-
-		// HTML for the percentile bar
-		let barHTML = `
-			<div class="percentile-bar-container">
-				<div class="percentile-bar">
-					<div class="indicator" style="left: calc(${value}% - 1px);"></div>
-				</div>
-			</div>
-		`;
-
-		return barHTML; 
-	}
-</script>
-
-</body>
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
 </html>
